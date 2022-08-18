@@ -1,54 +1,48 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GuyClass
 {
-    class Guy
+    class Program 
     {
-        public string Name;
-        public int Cash;
-
-        /// <summary>
-        /// Writes my name and the amount of cash to the console.
-        /// </summary>
-        public void WriteMyInfo()
+        static void Main(string[] args)
         {
-            Console.WriteLine(Name + " has " + Cash + " bucks.");
-        }
+            Guy joe = new Guy() { Name = "Joe", Cash = 50 };
+            Guy bob = new Guy() { Name = "Bob", Cash = 100 };
 
-        /// <summary>
-        /// Gives some of my cash, removing it from my wallet (or printing a message to the console if I don't have enough cash).
-        /// </summary>
-        /// <param name="amount">Amount of cash to give.</param>
-        /// <returns>The amount of cash removed from my wallet, or 0 if I don't have enough cash (or if the amount is invalid).</returns>
-        public int GiveCash(int amount)
-        {
-            if (amount <= 0)
+            while (true)
             {
-                Console.WriteLine(Name + " says: " + amount + " isn't a valid amount");
-                return 0;
-            }
-            if (amount > Cash)
-            {
-                Console.WriteLine(Name + " says: I don't have enough cash to give you " + amount);
-                return 0;
-            }
-            Cash -= amount;
-            return amount;
-        }
-
-        /// <summary>
-        /// Receive some cash, adding it to my wallet (or printing a message to the console if the amount is invalid).
-        /// </summary>
-        /// <param name="amount">Amount of cash to give.</param>
-        public void ReceiveCash(int amount)
-        {
-            if (amount <= 0)
-            {
-                Console.WriteLine(Name + " says: " + amount + " isn't an amount I'll take.")
-            }
-            else
-            {
-                Cash += amount;
+                joe.WriteMyInfo();
+                bob.WriteMyInfo();
+                Console.Write("Enter an amount: ");
+                string howMuch = Console.ReadLine();
+                if (howMuch == "") return;
+                if (int.TryParse(howMuch, out int amount))
+                {
+                    Console.Write("Who should give the cash: ");
+                    string whichGuy = Console.ReadLine();
+                    if (whichGuy == "Joe")
+                    {
+                        int cashGiven = joe.GiveCash(amount);
+                        bob.ReceiveCash(cashGiven);
+                    }
+                    else if (whichGuy == "Bob")
+                    {
+                        int cashGiven = bob.GiveCash(amount);
+                        joe.ReceiveCash(cashGiven);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter 'Joe' or 'Bob'");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Please enter a valid number (or blank to exit).");
+                }
             }
         }
     }
